@@ -39,7 +39,7 @@ public class NumIsland {
                         queue.add(y);
                         flag[x+1][y] = true;
                     }
-                    if(x-1>0 && grid[x-1][y] == '1' && flag[x-1][y] == false)
+                    if(x-1>=0 && grid[x-1][y] == '1' && flag[x-1][y] == false)
                     {
                         queue.add(x-1);
                         queue.add(y);
@@ -53,7 +53,7 @@ public class NumIsland {
                         flag[x][y+1] = true;
 
                     }
-                    if(y-1>0 && grid[x][y-1] == '1' && !flag[x][y - 1])
+                    if(y-1>=0 && grid[x][y-1] == '1' && !flag[x][y - 1])
                     {
                         queue.add(x);
                         queue.add(y-1);
