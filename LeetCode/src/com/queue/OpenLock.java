@@ -15,73 +15,45 @@ public class OpenLock {
      * @return
      */
     public int openLock(String[] deadends, String target) {
-        List<String> deadsList = Arrays.asList(deadends);
-        if(target == "0000")
-        {
-            return 0;
-        }
-        if(deadsList.contains(target))
-        {
+        //用来将数字转换为char的查询表
+        char[] pos = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+        Set<String> set = new HashSet<>(Arrays.asList(deadends));
+        LinkedList<String> list = new LinkedList<>();
+        if (target == null || target.length() == 0 || set.contains("0000"))
             return -1;
-        }
-        Queue<Integer> queue = new ArrayDeque<>();
-        Set<Integer> used = new HashSet<>();
-        queue.add(Integer.parseInt(target));//添加头结点
-        used.add(Integer.parseInt(target));//已使用字符串添加进哈希表
-        int step = 0;//循环的层数，也就是可以到达目标地最短步数
-        int floorLast = Integer.parseInt(target);//第一层的最后一个元素，之后代表每一层的最后一个元素
-        while(!queue.isEmpty())
-        {
-            int head = queue.poll();//将队头弹出并保存值
-//            if(head == 0)
-//            {
-//                return step;
-//            }
-            int[] neighbors = neighbor(head);//计算得到8个邻居
-            for(int i = 0; i < neighbors.length; i++)
-            {
-                if(used.contains(neighbors[i]) || deadsList.contains(neighbors[i]))//如果已经使用过或者属于死锁，则跳过
-                {
-                    continue;
+        list.add("0000");
+        int depth = 0;
+        //广度优先遍历
+        while (!list.isEmpty()) {
+            int size = list.size();
+            //System.out.println("当前队列长度：" + size);
+            while (size-- > 0) {
+                String str = list.removeFirst();
+                if (str.equals(target)) {
+                    return depth;
                 }
-                if(neighbors[i] == 0)//如果遇到‘0000’，直接返回step+1，多加的1是因为这一层还没结束step还没自增
-                {
-                    return step + 1;
+                if (!set.contains(str)) {
+                    set.add(str);
+                    list.addAll(getNextList(str, pos));
                 }
-                queue.add(neighbors[i]);
-                used.add(neighbors[i]);
             }
-            if(head == floorLast)//如果弹出的队头元素是上一层的最后一个节点，则步数加一，更新floorLast为当前层的最后一个
-            {
-//                System.out.println("第" + step + "层：\r\n");
-//                for(int tmp : queue)
-//                {
-//                    System.out.print(tmp);
-//                    System.out.print(" ");
-//                }
-                step++;
-                floorLast = neighbors[neighbors.length - 1];
-            }
+            //每一层遍历完，深度加一
+            depth++;
         }
-
-
         return -1;
     }
-    public int[] neighbor(int str)
-    {
-        int[] res = new int[8];
-        int a = str % 10;
-        int b = str / 10 % 10;
-        int c = str / 100 % 10;
-        int d = str / 1000;
-        res[0] = (d + 1)%10 * 1000 + c * 100 + b * 10 + a;
-        res[1] = (d - 1 + 10)%10 * 1000 + c * 100 + b * 10 + a;
-        res[2] = d * 1000 + (c + 1)%10 * 100 + b * 10 + a;
-        res[3] = d * 1000 + (c - 1 + 10)%10 * 100 + b * 10 + a;
-        res[4] = d * 1000 + c * 100 + (b + 1)%10 * 10 + a;
-        res[5] = d * 1000 + c * 100 + (b - 1 + 10)%10 * 10 + a;
-        res[6] = d * 1000 + c * 100 + b * 10 + (a + 1)%10;
-        res[7] = d * 1000 + c * 100 + b * 10 + (a - 1 + 10)%10;
+
+    private List<String> getNextList(String str, char[] pos) {
+        List<String> res = new ArrayList<>();
+        char[] chars = str.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            int num = chars[i] - '0';
+            char[] newChars = chars.clone();
+            newChars[i] = pos[(num + 11) % 10];     //数字加一
+            res.add(new String(newChars));
+            newChars[i] = pos[(num + 9) % 10];      //数字减一
+            res.add(new String(newChars));
+        }
         return res;
     }
 
