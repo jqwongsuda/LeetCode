@@ -1,6 +1,4 @@
-package com.leetcode;
-
-import static org.junit.jupiter.api.Assertions.*;
+package com.queue;
 
 class numIslandTest {
 
