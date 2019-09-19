@@ -3,7 +3,7 @@ package com.stack;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,14 +35,8 @@ class CloneGraphTest {
     @Test
     void cloneGraph() {
         Node n = cloneGraph.cloneGraph(node1);
+        System.out.println(n);
 
-        for(Node no : n.neighbors)
-        {
-            System.out.println(no.val);
-        }
     }
-    private void cloneTestHelper(Node node)
-    {
-        System.out.println(node);
-    }
+
 }
