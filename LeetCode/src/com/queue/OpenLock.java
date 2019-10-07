@@ -55,6 +55,5 @@ public class OpenLock {
             res.add(new String(newChars));
         }
         return res;
-    }
-
+    } 
 }
